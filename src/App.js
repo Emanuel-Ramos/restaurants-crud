@@ -25,13 +25,20 @@ function App() {
   // CRUD OPERATIONS
   // CREATE A restaurant
   const addRestaurant = (restaurant) => {
-    restaurant.id = restaurants.length + 1;
-    setRestaurants([...restaurants, restaurant]);
+    axios
+      .post(
+        "https://restaurants-service-heroku.herokuapp.com/restaurant/newRestaurant",
+        restaurant
+      )
+      .then((response) => {
+        console.log(response);
+        setEdit(!edit);
+      });
   };
 
   // EDIT A restaurant
   const editRestaurant = (restaurant) => {
-    setEdit(true);
+    setEdit(!edit);
     setCurrentRestaurant({
       id: restaurant.id,
       name: restaurant.name,
@@ -42,27 +49,37 @@ function App() {
   };
   // UPDATE A restaurant
   const updateRestaurant = (id, updatedRestaurant) => {
-    setEdit(false);
-    setRestaurants(
-      restaurants.map((restaurant) =>
-        restaurant.id === id ? updatedRestaurant : restaurant
+    axios
+      .put(
+        `https://restaurants-service-heroku.herokuapp.com/restaurant/${id}`,
+        updatedRestaurant
       )
-    );
+      .then((response) => {
+        console.log(response);
+        setEdit(!edit);
+      });
   };
   // REMOVE A restaurant
   const deleteRestaurant = (id) => {
-    setEdit(false);
-    setRestaurants(restaurants.filter((restaurant) => restaurant.id !== id));
+    axios
+      .delete(
+        `https://restaurants-service-heroku.herokuapp.com/restaurant/${id}`
+      )
+      .then((response) => {
+        console.log(response);
+        setEdit(!edit);
+      })
+      .catch((err) => err);
   };
   useEffect(() => {
     axios
-      .get("https://restaurants-service-heroku.herokuapp.com/restaurants/lista")
+      .get("https://restaurants-service-heroku.herokuapp.com/restaurant/lista")
       .then((response) => {
         setRestaurants(response.data);
         console.log(response);
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [edit]);
   return (
     <div className="container">
       <div className="header">
@@ -79,7 +96,7 @@ function App() {
                 edit={edit}
                 setEdit={setEdit}
                 currentRestaurant={currentRestaurant}
-                updaterestaurant={updateRestaurant}
+                updateRestaurant={updateRestaurant}
               />
             </div>
           ) : (
