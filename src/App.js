@@ -55,10 +55,11 @@ function App() {
   };
   useEffect(() => {
     axios
-      .get(
-        "https://restaurants-service-heroku.herokuapp.com/api/restaurants/lista"
-      )
-      .then((response) => console.log(response))
+      .get("https://restaurants-service-heroku.herokuapp.com/restaurants/lista")
+      .then((response) => {
+        setRestaurantData(response);
+        console.log(response);
+      })
       .catch((error) => console.log(error));
   }, []);
   return (
