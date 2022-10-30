@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import "./index.css";
 import Restaurants from "./Components/Restaurants";
 import AddRestaurant from "./Components/AddRestaurant";
-//import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import EditRestaurant from "./Components/EditRestaurant";
 import axios from "axios";
+import "./App.css";
 
 function App() {
   // setting initial states
 
-  const [restaurantData, setRestaurantData] = useState([]);
+  //const [restaurantData, setRestaurantData] = useState([]);
   const formState = {
     id: null,
     name: "",
@@ -17,7 +18,7 @@ function App() {
     rating: "",
     visited: "",
   };
-  const [restaurants, setRestaurants] = useState(restaurantData);
+  const [restaurants, setRestaurants] = useState([]);
   const [edit, setEdit] = useState(false);
   const [currentRestaurant, setCurrentRestaurant] = useState(formState);
 
@@ -57,7 +58,7 @@ function App() {
     axios
       .get("https://restaurants-service-heroku.herokuapp.com/restaurants/lista")
       .then((response) => {
-        setRestaurantData(response);
+        setRestaurants(response.data);
         console.log(response);
       })
       .catch((error) => console.log(error));
